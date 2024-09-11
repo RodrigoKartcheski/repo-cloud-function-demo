@@ -1,0 +1,14 @@
+steps:
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', 'https://github.com/RodrigoKartcheski/repo-cloud-function-demo.git']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/compose-dataflow-3065/my-function', '.']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/compose-dataflow-3065/my-function']
+
+images: ['gcr.io/compose-dataflow-3065/my-function']
+
+substitutions:
+  _REGION: 'us-central1'  # Substitua pela região desejada
