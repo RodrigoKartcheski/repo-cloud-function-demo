@@ -12,3 +12,7 @@ images: ['gcr.io/compose-dataflow-3065/my-function']
 
 substitutions:
   _REGION: 'us-central1'  # Substitua pela região desejada
+  
+options:
+  logging: CLOUD_LOGGING_ONLY
+
