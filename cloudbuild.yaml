@@ -1,4 +1,3 @@
-#
 steps:
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone', '--branch=main', 'https://github.com/RodrigoKartcheski/repo-cloud-function-demo.git']
@@ -9,10 +8,26 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/compose-dataflow-3065/my-function']
 
+# Passo para implantar a função no Cloud Functions
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - functions
+    - deploy
+    - my-function  # Nome da função
+    - --region=${_REGION}  # Substituição da região
+    - --runtime=python310  # Defina o runtime conforme o necessário
+    - --trigger-http  # Ou --trigger-event para funções baseadas em eventos
+    - --allow-unauthenticated  # Se você quiser que seja acessível publicamente
+    - --entry-point=main  # Nome do ponto de entrada da função
+    - --source=gs://compose-dataflow-3065/my-function  # Use o bucket onde os arquivos são armazenados ou pode ser o diretório atual da função
+    - --memory=256MB  # Opcional, ajuste conforme necessário
+    - --set-env-vars=KEY=VALUE  # Defina variáveis de ambiente, se necessário
+
 images: ['gcr.io/compose-dataflow-3065/my-function']
 
 substitutions:
   _REGION: 'us-central1'  # Substitua pela região desejada
-  
+
 options:
   logging: CLOUD_LOGGING_ONLY
+
